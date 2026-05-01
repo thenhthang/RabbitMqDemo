@@ -77,15 +77,16 @@ public abstract class BasePaymentWorker : BackgroundService
                     });
                 }
 
-                // Thành công: Xác nhận (Ack) để RabbitMQ xóa tin nhắn khỏi hàng đợi
+                // Xác nhận (Ack) thanh cong, RabbitMQ xóa tin nhắn khỏi hàng đợi
                 await _channel.BasicAckAsync(ea.DeliveryTag, multiple: false, cancellationToken: stoppingToken);
+                
             }
             catch (Exception ex) 
             {
                 Console.WriteLine($"[LỖI] Xử lý thất bại tại {_queueName}. Lỗi: {ex.Message}. Đẩy vào DLQ...");
 
                 // Thất bại: Từ chối tin nhắn (Nack) và KHÔNG đưa lại vào hàng đợi cũ (requeue: false).
-                // RabbitMQ sẽ tự động đẩy tin nhắn này sang DLX -> DLQ.
+                // Nack với requeue: false để đẩy vào DLX
                 await _channel.BasicNackAsync(ea.DeliveryTag, multiple: false, requeue: false, cancellationToken: stoppingToken);
             }
         };
