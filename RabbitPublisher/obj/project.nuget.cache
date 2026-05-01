@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "dgSpecHash": "OD726ONcPEM=",
+  "success": true,
+  "projectFilePath": "Z:\\Storage\\Dev\\RabbitPublisher\\RabbitPublisher\\RabbitPublisher.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\room\\.nuget\\packages\\microsoft.extensions.apidescription.server\\6.0.5\\microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
+    "C:\\Users\\room\\.nuget\\packages\\microsoft.openapi\\1.6.14\\microsoft.openapi.1.6.14.nupkg.sha512",
+    "C:\\Users\\room\\.nuget\\packages\\rabbitmq.client\\7.2.1\\rabbitmq.client.7.2.1.nupkg.sha512",
+    "C:\\Users\\room\\.nuget\\packages\\swashbuckle.aspnetcore\\6.6.2\\swashbuckle.aspnetcore.6.6.2.nupkg.sha512",
+    "C:\\Users\\room\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.6.2\\swashbuckle.aspnetcore.swagger.6.6.2.nupkg.sha512",
+    "C:\\Users\\room\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.6.2\\swashbuckle.aspnetcore.swaggergen.6.6.2.nupkg.sha512",
+    "C:\\Users\\room\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\6.6.2\\swashbuckle.aspnetcore.swaggerui.6.6.2.nupkg.sha512",
+    "C:\\Users\\room\\.nuget\\packages\\system.io.pipelines\\8.0.0\\system.io.pipelines.8.0.0.nupkg.sha512",
+    "C:\\Users\\room\\.nuget\\packages\\system.threading.ratelimiting\\8.0.0\\system.threading.ratelimiting.8.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
