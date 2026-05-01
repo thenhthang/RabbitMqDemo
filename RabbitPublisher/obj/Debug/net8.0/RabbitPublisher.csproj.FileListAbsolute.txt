@@ -34,3 +34,4 @@ Z:\Storage\Dev\RabbitPublisher\RabbitPublisher\obj\Debug\net8.0\refint\RabbitPub
 Z:\Storage\Dev\RabbitPublisher\RabbitPublisher\obj\Debug\net8.0\RabbitPublisher.pdb
 Z:\Storage\Dev\RabbitPublisher\RabbitPublisher\obj\Debug\net8.0\RabbitPublisher.genruntimeconfig.cache
 Z:\Storage\Dev\RabbitPublisher\RabbitPublisher\obj\Debug\net8.0\ref\RabbitPublisher.dll
+Z:\Storage\Dev\RabbitPublisher\RabbitPublisher\obj\Debug\net8.0\RabbitPublisher.sourcelink.json

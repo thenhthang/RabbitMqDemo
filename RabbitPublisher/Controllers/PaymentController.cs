@@ -17,7 +17,7 @@ namespace RabbitPublisher.Controllers
         [Route("ipn")]
         public IActionResult Webhook()
         {
-            _rabbitMqService.Publish("Xin chao", "test");
+            _rabbitMqService.PublishAsync("Xin chao "+DateTime.Now.ToString(), "test");
             return Ok();
         }
     }
