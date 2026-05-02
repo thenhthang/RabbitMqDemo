@@ -1,3 +1,9 @@
+### Cho phép ping
+```
+netsh advfirewall firewall add rule name="Allow Ping" protocol=icmpv4:8,any dir=in action=allow
+```
+### RabbitMq sử dụng các port để giao tiếp
+## Run trong Powershell
 ```
 # Danh sách các cổng cần mở theo tài liệu RabbitMQ của bạn
 $ports = @(4369, 5672, 5671, 25672, 15672, 61613, 61614, 1883, 8883, 15674, 15675)
