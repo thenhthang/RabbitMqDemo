@@ -6,6 +6,12 @@ rabbitmqctl add_user "myuser" "mypassword"
 rabbitmqctl set_permissions -p "/" "myuser" ".*" ".*" ".*"
 
 ```
+rabbitmqctl add_user admin password
+rabbitmqctl set_user_tags admin administrator
+rabbitmqctl set_permissions -p / admin ".*" ".*" ".*"
+```
+
+```
 ### Cho phép ping
 ```
 netsh advfirewall firewall add rule name="Allow Ping" protocol=icmpv4:8,any dir=in action=allow
