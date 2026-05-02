@@ -9,7 +9,11 @@
       "WorkerService1/1.0.0": {
         "dependencies": {
           "Microsoft.Extensions.Hosting": "8.0.1",
+          "Microsoft.Extensions.Hosting.WindowsServices": "8.0.1",
           "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": "1.22.1",
+          "NLog.Extensions.Logging": "6.1.2",
+          "NLog.Targets.Seq": "4.0.2",
+          "NLog.Web.AspNetCore": "6.1.2",
           "Polly": "8.6.6",
           "RabbitMQ.Client": "7.2.1"
         },
@@ -21,23 +25,11 @@
         "dependencies": {
           "Microsoft.Extensions.Configuration.Abstractions": "8.0.0",
           "Microsoft.Extensions.Primitives": "8.0.0"
-        },
-        "runtime": {
-          "lib/net8.0/Microsoft.Extensions.Configuration.dll": {
-            "assemblyVersion": "8.0.0.0",
-            "fileVersion": "8.0.23.53103"
-          }
         }
       },
       "Microsoft.Extensions.Configuration.Abstractions/8.0.0": {
         "dependencies": {
           "Microsoft.Extensions.Primitives": "8.0.0"
-        },
-        "runtime": {
-          "lib/net8.0/Microsoft.Extensions.Configuration.Abstractions.dll": {
-            "assemblyVersion": "8.0.0.0",
-            "fileVersion": "8.0.23.53103"
-          }
         }
       },
       "Microsoft.Extensions.Configuration.Binder/8.0.2": {
@@ -55,24 +47,12 @@
         "dependencies": {
           "Microsoft.Extensions.Configuration": "8.0.0",
           "Microsoft.Extensions.Configuration.Abstractions": "8.0.0"
-        },
-        "runtime": {
-          "lib/net8.0/Microsoft.Extensions.Configuration.CommandLine.dll": {
-            "assemblyVersion": "8.0.0.0",
-            "fileVersion": "8.0.23.53103"
-          }
         }
       },
       "Microsoft.Extensions.Configuration.EnvironmentVariables/8.0.0": {
         "dependencies": {
           "Microsoft.Extensions.Configuration": "8.0.0",
           "Microsoft.Extensions.Configuration.Abstractions": "8.0.0"
-        },
-        "runtime": {
-          "lib/net8.0/Microsoft.Extensions.Configuration.EnvironmentVariables.dll": {
-            "assemblyVersion": "8.0.0.0",
-            "fileVersion": "8.0.23.53103"
-          }
         }
       },
       "Microsoft.Extensions.Configuration.FileExtensions/8.0.1": {
@@ -165,12 +145,6 @@
       "Microsoft.Extensions.FileProviders.Abstractions/8.0.0": {
         "dependencies": {
           "Microsoft.Extensions.Primitives": "8.0.0"
-        },
-        "runtime": {
-          "lib/net8.0/Microsoft.Extensions.FileProviders.Abstractions.dll": {
-            "assemblyVersion": "8.0.0.0",
-            "fileVersion": "8.0.23.53103"
-          }
         }
       },
       "Microsoft.Extensions.FileProviders.Physical/8.0.0": {
@@ -178,22 +152,9 @@
           "Microsoft.Extensions.FileProviders.Abstractions": "8.0.0",
           "Microsoft.Extensions.FileSystemGlobbing": "8.0.0",
           "Microsoft.Extensions.Primitives": "8.0.0"
-        },
-        "runtime": {
-          "lib/net8.0/Microsoft.Extensions.FileProviders.Physical.dll": {
-            "assemblyVersion": "8.0.0.0",
-            "fileVersion": "8.0.23.53103"
-          }
         }
       },
-      "Microsoft.Extensions.FileSystemGlobbing/8.0.0": {
-        "runtime": {
-          "lib/net8.0/Microsoft.Extensions.FileSystemGlobbing.dll": {
-            "assemblyVersion": "8.0.0.0",
-            "fileVersion": "8.0.23.53103"
-          }
-        }
-      },
+      "Microsoft.Extensions.FileSystemGlobbing/8.0.0": {},
       "Microsoft.Extensions.Hosting/8.0.1": {
         "dependencies": {
           "Microsoft.Extensions.Configuration": "8.0.0",
@@ -237,6 +198,19 @@
         "runtime": {
           "lib/net8.0/Microsoft.Extensions.Hosting.Abstractions.dll": {
             "assemblyVersion": "8.0.0.0",
+            "fileVersion": "8.0.1024.46610"
+          }
+        }
+      },
+      "Microsoft.Extensions.Hosting.WindowsServices/8.0.1": {
+        "dependencies": {
+          "Microsoft.Extensions.Hosting": "8.0.1",
+          "Microsoft.Extensions.Logging.EventLog": "8.0.1",
+          "System.ServiceProcess.ServiceController": "8.0.1"
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.Extensions.Hosting.WindowsServices.dll": {
+            "assemblyVersion": "8.0.0.1",
             "fileVersion": "8.0.1024.46610"
           }
         }
@@ -360,23 +334,53 @@
           "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.2",
           "Microsoft.Extensions.Options": "8.0.2",
           "Microsoft.Extensions.Primitives": "8.0.0"
+        }
+      },
+      "Microsoft.Extensions.Primitives/8.0.0": {},
+      "Microsoft.VisualStudio.Azure.Containers.Tools.Targets/1.22.1": {},
+      "NLog/6.1.1": {
+        "runtime": {
+          "lib/netstandard2.1/NLog.dll": {
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "6.1.1.5033"
+          }
+        }
+      },
+      "NLog.Extensions.Logging/6.1.2": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration.Abstractions": "8.0.0",
+          "Microsoft.Extensions.Logging": "8.0.1",
+          "NLog": "6.1.1"
         },
         "runtime": {
-          "lib/net8.0/Microsoft.Extensions.Options.ConfigurationExtensions.dll": {
-            "assemblyVersion": "8.0.0.0",
-            "fileVersion": "8.0.23.53103"
+          "lib/net8.0/NLog.Extensions.Logging.dll": {
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "6.1.2.810"
           }
         }
       },
-      "Microsoft.Extensions.Primitives/8.0.0": {
+      "NLog.Targets.Seq/4.0.2": {
+        "dependencies": {
+          "NLog": "6.1.1"
+        },
         "runtime": {
-          "lib/net8.0/Microsoft.Extensions.Primitives.dll": {
-            "assemblyVersion": "8.0.0.0",
-            "fileVersion": "8.0.23.53103"
+          "lib/net8.0/NLog.Targets.Seq.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "4.0.2.0"
           }
         }
       },
-      "Microsoft.VisualStudio.Azure.Containers.Tools.Targets/1.22.1": {},
+      "NLog.Web.AspNetCore/6.1.2": {
+        "dependencies": {
+          "NLog.Extensions.Logging": "6.1.2"
+        },
+        "runtime": {
+          "lib/net8.0/NLog.Web.AspNetCore.dll": {
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "6.1.2.1383"
+          }
+        }
+      },
       "Polly/8.6.6": {
         "dependencies": {
           "Polly.Core": "8.6.6"
@@ -416,12 +420,6 @@
           }
         },
         "runtimeTargets": {
-          "runtimes/win/lib/net8.0/System.Diagnostics.EventLog.Messages.dll": {
-            "rid": "win",
-            "assetType": "runtime",
-            "assemblyVersion": "8.0.0.0",
-            "fileVersion": "0.0.0.0"
-          },
           "runtimes/win/lib/net8.0/System.Diagnostics.EventLog.dll": {
             "rid": "win",
             "assetType": "runtime",
@@ -430,22 +428,27 @@
           }
         }
       },
-      "System.IO.Pipelines/8.0.0": {
+      "System.IO.Pipelines/8.0.0": {},
+      "System.ServiceProcess.ServiceController/8.0.1": {
+        "dependencies": {
+          "System.Diagnostics.EventLog": "8.0.1"
+        },
         "runtime": {
-          "lib/net8.0/System.IO.Pipelines.dll": {
-            "assemblyVersion": "8.0.0.0",
-            "fileVersion": "8.0.23.53103"
+          "lib/net8.0/System.ServiceProcess.ServiceController.dll": {
+            "assemblyVersion": "8.0.0.1",
+            "fileVersion": "8.0.1024.46610"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/win/lib/net8.0/System.ServiceProcess.ServiceController.dll": {
+            "rid": "win",
+            "assetType": "runtime",
+            "assemblyVersion": "8.0.0.1",
+            "fileVersion": "8.0.1024.46610"
           }
         }
       },
-      "System.Threading.RateLimiting/8.0.0": {
-        "runtime": {
-          "lib/net8.0/System.Threading.RateLimiting.dll": {
-            "assemblyVersion": "8.0.0.0",
-            "fileVersion": "8.0.23.53103"
-          }
-        }
-      }
+      "System.Threading.RateLimiting/8.0.0": {}
     }
   },
   "libraries": {
@@ -573,6 +576,13 @@
       "path": "microsoft.extensions.hosting.abstractions/8.0.1",
       "hashPath": "microsoft.extensions.hosting.abstractions.8.0.1.nupkg.sha512"
     },
+    "Microsoft.Extensions.Hosting.WindowsServices/8.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-5p0tjMDpr8tgzjBdu9Rzk8lUU/PaR1D3Us52XZypl85QTxfAjthR1+YywB3GsGc+FOZWdpuEDsV8kZisEC2Hng==",
+      "path": "microsoft.extensions.hosting.windowsservices/8.0.1",
+      "hashPath": "microsoft.extensions.hosting.windowsservices.8.0.1.nupkg.sha512"
+    },
     "Microsoft.Extensions.Logging/8.0.1": {
       "type": "package",
       "serviceable": true,
@@ -650,6 +660,34 @@
       "path": "microsoft.visualstudio.azure.containers.tools.targets/1.22.1",
       "hashPath": "microsoft.visualstudio.azure.containers.tools.targets.1.22.1.nupkg.sha512"
     },
+    "NLog/6.1.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-TCIwfAQX2IpZDnqs/+c5jCPnveCG8M6/wFmUk2odjRl0xiocfe4B+4qIvRbVbazSxcS28+Zu14pFeRJE9yAQAQ==",
+      "path": "nlog/6.1.1",
+      "hashPath": "nlog.6.1.1.nupkg.sha512"
+    },
+    "NLog.Extensions.Logging/6.1.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-CDak9fN3yqDrmFth5OX/8WpRdEhHOHDK9O4Lej4oWG0r9MygEKfwZXgl1F5ixSnz0Sk3aW/3a/irjtttJUGDDw==",
+      "path": "nlog.extensions.logging/6.1.2",
+      "hashPath": "nlog.extensions.logging.6.1.2.nupkg.sha512"
+    },
+    "NLog.Targets.Seq/4.0.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-6p4QWHiRvkObfZok3wrNRPlgJ3Kp1r+Pv3BadK++Zdj+o+/LD86Gq0No1PMNEEhJUnvpSJK8BaE2uDa2k8DhbQ==",
+      "path": "nlog.targets.seq/4.0.2",
+      "hashPath": "nlog.targets.seq.4.0.2.nupkg.sha512"
+    },
+    "NLog.Web.AspNetCore/6.1.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-PLXSRq7SYKhneMMd7+Ds4/gOVg++CDNpdN67ke6gp837aW4e70aQWuhMFHVL4YnFpO1UL+5QGEHP4w9wKZfwtg==",
+      "path": "nlog.web.aspnetcore/6.1.2",
+      "hashPath": "nlog.web.aspnetcore.6.1.2.nupkg.sha512"
+    },
     "Polly/8.6.6": {
       "type": "package",
       "serviceable": true,
@@ -684,6 +722,13 @@
       "sha512": "sha512-FHNOatmUq0sqJOkTx+UF/9YK1f180cnW5FVqnQMvYUN0elp6wFzbtPSiqbo1/ru8ICp43JM1i7kKkk6GsNGHlA==",
       "path": "system.io.pipelines/8.0.0",
       "hashPath": "system.io.pipelines.8.0.0.nupkg.sha512"
+    },
+    "System.ServiceProcess.ServiceController/8.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-02I0BXo1kmMBgw03E8Hu4K6nTqur4wpQdcDZrndczPzY2fEoGvlinE35AWbyzLZ2h2IksEZ6an4tVt3hi9j1oA==",
+      "path": "system.serviceprocess.servicecontroller/8.0.1",
+      "hashPath": "system.serviceprocess.servicecontroller.8.0.1.nupkg.sha512"
     },
     "System.Threading.RateLimiting/8.0.0": {
       "type": "package",

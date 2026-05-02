@@ -363,6 +363,27 @@
           "buildTransitive/net6.0/_._": {}
         }
       },
+      "Microsoft.Extensions.Hosting.WindowsServices/8.0.1": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Extensions.Hosting": "8.0.1",
+          "Microsoft.Extensions.Logging.EventLog": "8.0.1",
+          "System.ServiceProcess.ServiceController": "8.0.1"
+        },
+        "compile": {
+          "lib/net8.0/Microsoft.Extensions.Hosting.WindowsServices.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.Extensions.Hosting.WindowsServices.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/net6.0/_._": {}
+        }
+      },
       "Microsoft.Extensions.Logging/8.0.1": {
         "type": "package",
         "dependencies": {
@@ -585,6 +606,72 @@
           "build/Microsoft.VisualStudio.Azure.Containers.Tools.Targets.targets": {}
         }
       },
+      "NLog/6.1.1": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.1/NLog.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.1/NLog.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "NLog.Extensions.Logging/6.1.2": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Extensions.Configuration.Abstractions": "8.0.0",
+          "Microsoft.Extensions.Logging": "8.0.0",
+          "NLog": "6.1.1"
+        },
+        "compile": {
+          "lib/net8.0/NLog.Extensions.Logging.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/NLog.Extensions.Logging.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "NLog.Targets.Seq/4.0.2": {
+        "type": "package",
+        "dependencies": {
+          "NLog": "5.2.5"
+        },
+        "compile": {
+          "lib/net8.0/NLog.Targets.Seq.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/NLog.Targets.Seq.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "NLog.Web.AspNetCore/6.1.2": {
+        "type": "package",
+        "dependencies": {
+          "NLog.Extensions.Logging": "6.1.2"
+        },
+        "compile": {
+          "lib/net8.0/NLog.Web.AspNetCore.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/NLog.Web.AspNetCore.dll": {
+            "related": ".xml"
+          }
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
+      },
       "Polly/8.6.6": {
         "type": "package",
         "dependencies": {
@@ -671,6 +758,31 @@
         },
         "build": {
           "buildTransitive/net6.0/_._": {}
+        }
+      },
+      "System.ServiceProcess.ServiceController/8.0.1": {
+        "type": "package",
+        "dependencies": {
+          "System.Diagnostics.EventLog": "8.0.1"
+        },
+        "compile": {
+          "lib/net8.0/System.ServiceProcess.ServiceController.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/System.ServiceProcess.ServiceController.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/net6.0/_._": {}
+        },
+        "runtimeTargets": {
+          "runtimes/win/lib/net8.0/System.ServiceProcess.ServiceController.dll": {
+            "assetType": "runtime",
+            "rid": "win"
+          }
         }
       },
       "System.Threading.RateLimiting/8.0.0": {
@@ -1223,6 +1335,38 @@
         "useSharedDesignerContext.txt"
       ]
     },
+    "Microsoft.Extensions.Hosting.WindowsServices/8.0.1": {
+      "sha512": "5p0tjMDpr8tgzjBdu9Rzk8lUU/PaR1D3Us52XZypl85QTxfAjthR1+YywB3GsGc+FOZWdpuEDsV8kZisEC2Hng==",
+      "type": "package",
+      "path": "microsoft.extensions.hosting.windowsservices/8.0.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "LICENSE.TXT",
+        "PACKAGE.md",
+        "THIRD-PARTY-NOTICES.TXT",
+        "buildTransitive/net461/Microsoft.Extensions.Hosting.WindowsServices.targets",
+        "buildTransitive/net462/_._",
+        "buildTransitive/net6.0/_._",
+        "buildTransitive/netcoreapp2.0/Microsoft.Extensions.Hosting.WindowsServices.targets",
+        "lib/net462/Microsoft.Extensions.Hosting.WindowsServices.dll",
+        "lib/net462/Microsoft.Extensions.Hosting.WindowsServices.xml",
+        "lib/net6.0/Microsoft.Extensions.Hosting.WindowsServices.dll",
+        "lib/net6.0/Microsoft.Extensions.Hosting.WindowsServices.xml",
+        "lib/net7.0/Microsoft.Extensions.Hosting.WindowsServices.dll",
+        "lib/net7.0/Microsoft.Extensions.Hosting.WindowsServices.xml",
+        "lib/net8.0/Microsoft.Extensions.Hosting.WindowsServices.dll",
+        "lib/net8.0/Microsoft.Extensions.Hosting.WindowsServices.xml",
+        "lib/netstandard2.0/Microsoft.Extensions.Hosting.WindowsServices.dll",
+        "lib/netstandard2.0/Microsoft.Extensions.Hosting.WindowsServices.xml",
+        "lib/netstandard2.1/Microsoft.Extensions.Hosting.WindowsServices.dll",
+        "lib/netstandard2.1/Microsoft.Extensions.Hosting.WindowsServices.xml",
+        "microsoft.extensions.hosting.windowsservices.8.0.1.nupkg.sha512",
+        "microsoft.extensions.hosting.windowsservices.nuspec",
+        "useSharedDesignerContext.txt"
+      ]
+    },
     "Microsoft.Extensions.Logging/8.0.1": {
       "sha512": "4x+pzsQEbqxhNf1QYRr5TDkLP9UsLT3A6MdRKDDEgrW7h1ljiEPgTNhKYUhNCCAaVpQECVQ+onA91PTPnIp6Lw==",
       "type": "package",
@@ -1662,6 +1806,97 @@
         "tools/zh-Hant/Microsoft.VisualStudio.Containers.Tools.Tasks.resources.dll"
       ]
     },
+    "NLog/6.1.1": {
+      "sha512": "TCIwfAQX2IpZDnqs/+c5jCPnveCG8M6/wFmUk2odjRl0xiocfe4B+4qIvRbVbazSxcS28+Zu14pFeRJE9yAQAQ==",
+      "type": "package",
+      "path": "nlog/6.1.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "N.png",
+        "lib/net35/NLog.dll",
+        "lib/net35/NLog.xml",
+        "lib/net45/NLog.dll",
+        "lib/net45/NLog.xml",
+        "lib/net46/NLog.dll",
+        "lib/net46/NLog.xml",
+        "lib/netstandard2.0/NLog.dll",
+        "lib/netstandard2.0/NLog.xml",
+        "lib/netstandard2.1/NLog.dll",
+        "lib/netstandard2.1/NLog.xml",
+        "nlog.6.1.1.nupkg.sha512",
+        "nlog.nuspec"
+      ]
+    },
+    "NLog.Extensions.Logging/6.1.2": {
+      "sha512": "CDak9fN3yqDrmFth5OX/8WpRdEhHOHDK9O4Lej4oWG0r9MygEKfwZXgl1F5ixSnz0Sk3aW/3a/irjtttJUGDDw==",
+      "type": "package",
+      "path": "nlog.extensions.logging/6.1.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "N.png",
+        "README.md",
+        "lib/net10.0/NLog.Extensions.Logging.dll",
+        "lib/net10.0/NLog.Extensions.Logging.xml",
+        "lib/net462/NLog.Extensions.Logging.dll",
+        "lib/net462/NLog.Extensions.Logging.xml",
+        "lib/net6.0/NLog.Extensions.Logging.dll",
+        "lib/net6.0/NLog.Extensions.Logging.xml",
+        "lib/net8.0/NLog.Extensions.Logging.dll",
+        "lib/net8.0/NLog.Extensions.Logging.xml",
+        "lib/netstandard2.0/NLog.Extensions.Logging.dll",
+        "lib/netstandard2.0/NLog.Extensions.Logging.xml",
+        "lib/netstandard2.1/NLog.Extensions.Logging.dll",
+        "lib/netstandard2.1/NLog.Extensions.Logging.xml",
+        "nlog.extensions.logging.6.1.2.nupkg.sha512",
+        "nlog.extensions.logging.nuspec"
+      ]
+    },
+    "NLog.Targets.Seq/4.0.2": {
+      "sha512": "6p4QWHiRvkObfZok3wrNRPlgJ3Kp1r+Pv3BadK++Zdj+o+/LD86Gq0No1PMNEEhJUnvpSJK8BaE2uDa2k8DhbQ==",
+      "type": "package",
+      "path": "nlog.targets.seq/4.0.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "lib/net462/NLog.Targets.Seq.dll",
+        "lib/net462/NLog.Targets.Seq.xml",
+        "lib/net6.0/NLog.Targets.Seq.dll",
+        "lib/net6.0/NLog.Targets.Seq.xml",
+        "lib/net8.0/NLog.Targets.Seq.dll",
+        "lib/net8.0/NLog.Targets.Seq.xml",
+        "lib/netstandard2.0/NLog.Targets.Seq.dll",
+        "lib/netstandard2.0/NLog.Targets.Seq.xml",
+        "nlog-targets-seq.png",
+        "nlog.targets.seq.4.0.2.nupkg.sha512",
+        "nlog.targets.seq.nuspec"
+      ]
+    },
+    "NLog.Web.AspNetCore/6.1.2": {
+      "sha512": "PLXSRq7SYKhneMMd7+Ds4/gOVg++CDNpdN67ke6gp837aW4e70aQWuhMFHVL4YnFpO1UL+5QGEHP4w9wKZfwtg==",
+      "type": "package",
+      "path": "nlog.web.aspnetcore/6.1.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "N.png",
+        "README.md",
+        "lib/net10.0/NLog.Web.AspNetCore.dll",
+        "lib/net10.0/NLog.Web.AspNetCore.xml",
+        "lib/net462/NLog.Web.AspNetCore.dll",
+        "lib/net462/NLog.Web.AspNetCore.xml",
+        "lib/net6.0/NLog.Web.AspNetCore.dll",
+        "lib/net6.0/NLog.Web.AspNetCore.xml",
+        "lib/net8.0/NLog.Web.AspNetCore.dll",
+        "lib/net8.0/NLog.Web.AspNetCore.xml",
+        "lib/netstandard2.0/NLog.Web.AspNetCore.dll",
+        "lib/netstandard2.0/NLog.Web.AspNetCore.xml",
+        "nlog.web.aspnetcore.6.1.2.nupkg.sha512",
+        "nlog.web.aspnetcore.nuspec"
+      ]
+    },
     "Polly/8.6.6": {
       "sha512": "czKHYJ6uGowPijuZt4kgF4njfGvWxVZ8mKBcrZ9iEtwDe9HKdF0ug6p6TwUG8EHuuufgbDU//rSBFebt5/0Fyw==",
       "type": "package",
@@ -1802,6 +2037,42 @@
         "useSharedDesignerContext.txt"
       ]
     },
+    "System.ServiceProcess.ServiceController/8.0.1": {
+      "sha512": "02I0BXo1kmMBgw03E8Hu4K6nTqur4wpQdcDZrndczPzY2fEoGvlinE35AWbyzLZ2h2IksEZ6an4tVt3hi9j1oA==",
+      "type": "package",
+      "path": "system.serviceprocess.servicecontroller/8.0.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "LICENSE.TXT",
+        "PACKAGE.md",
+        "THIRD-PARTY-NOTICES.TXT",
+        "buildTransitive/net461/System.ServiceProcess.ServiceController.targets",
+        "buildTransitive/net462/_._",
+        "buildTransitive/net6.0/_._",
+        "buildTransitive/netcoreapp2.0/System.ServiceProcess.ServiceController.targets",
+        "lib/net462/System.ServiceProcess.ServiceController.dll",
+        "lib/net462/System.ServiceProcess.ServiceController.xml",
+        "lib/net6.0/System.ServiceProcess.ServiceController.dll",
+        "lib/net6.0/System.ServiceProcess.ServiceController.xml",
+        "lib/net7.0/System.ServiceProcess.ServiceController.dll",
+        "lib/net7.0/System.ServiceProcess.ServiceController.xml",
+        "lib/net8.0/System.ServiceProcess.ServiceController.dll",
+        "lib/net8.0/System.ServiceProcess.ServiceController.xml",
+        "lib/netstandard2.0/System.ServiceProcess.ServiceController.dll",
+        "lib/netstandard2.0/System.ServiceProcess.ServiceController.xml",
+        "runtimes/win/lib/net6.0/System.ServiceProcess.ServiceController.dll",
+        "runtimes/win/lib/net6.0/System.ServiceProcess.ServiceController.xml",
+        "runtimes/win/lib/net7.0/System.ServiceProcess.ServiceController.dll",
+        "runtimes/win/lib/net7.0/System.ServiceProcess.ServiceController.xml",
+        "runtimes/win/lib/net8.0/System.ServiceProcess.ServiceController.dll",
+        "runtimes/win/lib/net8.0/System.ServiceProcess.ServiceController.xml",
+        "system.serviceprocess.servicecontroller.8.0.1.nupkg.sha512",
+        "system.serviceprocess.servicecontroller.nuspec",
+        "useSharedDesignerContext.txt"
+      ]
+    },
     "System.Threading.RateLimiting/8.0.0": {
       "sha512": "7mu9v0QDv66ar3DpGSZHg9NuNcxDaaAcnMULuZlaTpP9+hwXhrxNGsF5GmLkSHxFdb5bBc1TzeujsRgTrPWi+Q==",
       "type": "package",
@@ -1835,7 +2106,11 @@
   "projectFileDependencyGroups": {
     "net8.0": [
       "Microsoft.Extensions.Hosting >= 8.0.1",
+      "Microsoft.Extensions.Hosting.WindowsServices >= 8.0.1",
       "Microsoft.VisualStudio.Azure.Containers.Tools.Targets >= 1.22.1",
+      "NLog.Extensions.Logging >= 6.1.2",
+      "NLog.Targets.Seq >= 4.0.2",
+      "NLog.Web.AspNetCore >= 6.1.2",
       "Polly >= 8.6.6",
       "RabbitMQ.Client >= 7.2.1"
     ]
@@ -1895,9 +2170,25 @@
             "target": "Package",
             "version": "[8.0.1, )"
           },
+          "Microsoft.Extensions.Hosting.WindowsServices": {
+            "target": "Package",
+            "version": "[8.0.1, )"
+          },
           "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": {
             "target": "Package",
             "version": "[1.22.1, )"
+          },
+          "NLog.Extensions.Logging": {
+            "target": "Package",
+            "version": "[6.1.2, )"
+          },
+          "NLog.Targets.Seq": {
+            "target": "Package",
+            "version": "[4.0.2, )"
+          },
+          "NLog.Web.AspNetCore": {
+            "target": "Package",
+            "version": "[6.1.2, )"
           },
           "Polly": {
             "target": "Package",

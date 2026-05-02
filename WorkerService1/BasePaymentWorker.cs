@@ -23,7 +23,7 @@ public abstract class BasePaymentWorker : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        var factory = new ConnectionFactory { HostName = "mac.lan", UserName="guest",Password="guest", AutomaticRecoveryEnabled = true };
+        var factory = new ConnectionFactory { HostName = "192.168.1.63", UserName="admin",Password="password", AutomaticRecoveryEnabled = true };
         _connection = await factory.CreateConnectionAsync(stoppingToken);
         _channel = await _connection.CreateChannelAsync(cancellationToken: stoppingToken);
         // --- 1. KHAI BÁO CƠ CHẾ DEAD LETTER (DLX & DLQ) ---
