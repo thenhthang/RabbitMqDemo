@@ -1,0 +1,20 @@
+```
+# Danh sách các cổng cần mở theo tài liệu RabbitMQ của bạn
+$ports = @(4369, 5672, 5671, 25672, 15672, 61613, 61614, 1883, 8883, 15674, 15675)
+
+# Thêm dải cổng động 35672-35682
+$dynamicPorts = "35672-35682"
+
+Write-Host "Dang mo cac cong RabbitMQ tren Firewall..." -ForegroundColor Cyan
+
+# Lệnh mở các cổng đơn lẻ
+foreach ($port in $ports) {
+    New-NetFirewallRule -DisplayName "RabbitMQ Port $port" -Direction Inbound -LocalPort $port -Protocol TCP -Action Allow -ErrorAction SilentlyContinue
+}
+
+# Lệnh mở dải cổng động
+New-NetFirewallRule -DisplayName "RabbitMQ Dynamic Ports" -Direction Inbound -LocalPort $dynamicPorts -Protocol TCP -Action Allow -ErrorAction SilentlyContinue
+
+Write-Host "Hoan thanh! Tat ca cac cong da duoc mo." -ForegroundColor Green
+
+```
