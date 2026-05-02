@@ -1,3 +1,11 @@
+### Tạo user, user guest không the truy cập từ bên ngoài host, phải tạo user mới
+```
+# Create user (if not exists)
+rabbitmqctl add_user "myuser" "mypassword"
+# Set permissions for the "/" vhost
+rabbitmqctl set_permissions -p "/" "myuser" ".*" ".*" ".*"
+
+```
 ### Cho phép ping
 ```
 netsh advfirewall firewall add rule name="Allow Ping" protocol=icmpv4:8,any dir=in action=allow
