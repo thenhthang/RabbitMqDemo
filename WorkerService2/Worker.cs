@@ -1,17 +1,13 @@
-﻿
-using Microsoft.Extensions.Options;
-
-namespace WorkerService1
+﻿namespace WorkerService2
 {
     public class Worker : BasePaymentWorker
     {
         private readonly ILogger<Worker> _logger;
         // Truyền tên Queue và Routing Key tương ứng vào Base
-        public Worker(ILogger<Worker> loger,
-            IOptions<RabbitMqSettings> rabbitMqSertting) : base(
-            rabbitMqSettings: rabbitMqSertting,
-            logger:loger)
-        { 
+        public Worker(ILogger<Worker> loger) : base(
+            queueName: "paymenttest",
+            routingKey: "test2")
+        {
             _logger = loger;
         }
 

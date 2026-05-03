@@ -1,19 +1,14 @@
-﻿
-using WorkerService1;
+using WorkerService2;
 using NLog;
 using NLog.Web;
-using NLog.Extensions.Logging;
-
 var logger = LogManager.Setup()
                        .LoadConfigurationFromFile("nlog.config")
                        .GetCurrentClassLogger();
 try
 {
     var builder = Host.CreateApplicationBuilder(args);
-    builder.Services.AddWindowsService();
     builder.Logging.ClearProviders();
     builder.UseNLog();
-    builder.Services.Configure<RabbitMqSettings>(builder.Configuration.GetSection("RabbitMqSettings"));
     builder.Services.AddHostedService<Worker>();
 
     var host = builder.Build();

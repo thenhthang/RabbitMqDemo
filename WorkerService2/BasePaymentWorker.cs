@@ -1,45 +1,36 @@
 ﻿using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using Polly;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
 using System.Text.Json;
-using WorkerService1;
+using WorkerService2;
 
 public abstract class BasePaymentWorker : BackgroundService
 {
-    //private readonly string _queueName;
-    //private readonly string _routingKey;
+    private readonly string _queueName;
+    private readonly string _routingKey;
     private IConnection? _connection;
     private IChannel? _channel;
-    private readonly ILogger<BasePaymentWorker> _logger;
-    private readonly RabbitMqSettings _rabbitMqSettings;
     // Tên của Exchange và Queue dành cho tin nhắn lỗi
     private const string DlxName = "dlx_payment_exchange";
     private const string DlqName = "dlq_payment_queue";
-    protected BasePaymentWorker(
-                                IOptions<RabbitMqSettings> rabbitMqSettings,
-                                ILogger<BasePaymentWorker> logger)
+    protected BasePaymentWorker(string queueName, string routingKey)
     {
-        //_queueName = queueName;
-        //_routingKey = routingKey;
-        _rabbitMqSettings = rabbitMqSettings.Value;
-        _logger = logger;
-        _logger.LogInformation("Start worker");
+        _queueName = queueName;
+        _routingKey = routingKey;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-
-        var factory = new ConnectionFactory {HostName=_rabbitMqSettings.HostName, UserName=_rabbitMqSettings.UserName,Password=_rabbitMqSettings.Password, AutomaticRecoveryEnabled = true };
+        var factory = new ConnectionFactory { HostName = "192.168.1.63", UserName = "admin", Password = "password", AutomaticRecoveryEnabled = true };
         _connection = await factory.CreateConnectionAsync(stoppingToken);
         _channel = await _connection.CreateChannelAsync(cancellationToken: stoppingToken);
         // --- 1. KHAI BÁO CƠ CHẾ DEAD LETTER (DLX & DLQ) ---
         await _channel.ExchangeDeclareAsync(DlxName, ExchangeType.Direct, durable: true, cancellationToken: stoppingToken);
         var dlqArgs = new Dictionary<string, object?> { { "x-queue-type", "quorum" } };
         await _channel.QueueDeclareAsync(DlqName, durable: true, exclusive: false, autoDelete: false, arguments: dlqArgs, cancellationToken: stoppingToken);
-        await _channel.QueueBindAsync(DlqName, DlxName, _rabbitMqSettings.RoutingKey, cancellationToken: stoppingToken);
+        await _channel.QueueBindAsync(DlqName, DlxName, _routingKey, cancellationToken: stoppingToken);
         //********************************************
 
         // 1. Khai báo Exchange (phòng trường hợp API chưa chạy)
@@ -49,12 +40,12 @@ public abstract class BasePaymentWorker : BackgroundService
         var args = new Dictionary<string, object?> {
             { "x-queue-type", "quorum" } ,
             { "x-dead-letter-exchange", DlxName }, // Khi tin nhắn bị từ chối, gửi vào đây
-            { "x-dead-letter-routing-key", _rabbitMqSettings.RoutingKey } // Giữ nguyên routing key cũ
+            { "x-dead-letter-routing-key", _routingKey } // Giữ nguyên routing key cũ
         };
-        await _channel.QueueDeclareAsync(_rabbitMqSettings.QueueName, durable: true, exclusive: false, autoDelete: false, arguments: args, cancellationToken: stoppingToken);
+        await _channel.QueueDeclareAsync(_queueName, durable: true, exclusive: false, autoDelete: false, arguments: args, cancellationToken: stoppingToken);
 
         // 3. Liên kết Queue với Exchange thông qua Routing Key
-        await _channel.QueueBindAsync(_rabbitMqSettings.QueueName,_rabbitMqSettings.ExchangeName, _rabbitMqSettings.RoutingKey, cancellationToken: stoppingToken);
+        await _channel.QueueBindAsync(_queueName, "payment_exchange", _routingKey, cancellationToken: stoppingToken);
         // --- 3. ĐỊNH NGHĨA CHÍNH SÁCH RETRY VỚI POLLY ---
         // Chiến lược Exponential Backoff: Thử lại 3 lần. 
         // Thời gian chờ: Lần 1 (2 giây), Lần 2 (4 giây), Lần 3 (8 giây)
@@ -65,7 +56,7 @@ public abstract class BasePaymentWorker : BackgroundService
                 sleepDurationProvider: attempt => TimeSpan.FromSeconds(Math.Pow(2, attempt)),
                 onRetry: (exception, timeSpan, attempt, context) =>
                 {
-                    _logger.LogWarning($"[CẢNH BÁO] {_rabbitMqSettings.QueueName} lỗi. Thử lại lần {attempt} sau {timeSpan.TotalSeconds}s. Lỗi: {exception.Message}");
+                    Console.WriteLine($"[CẢNH BÁO] {_queueName} lỗi. Thử lại lần {attempt} sau {timeSpan.TotalSeconds}s. Lỗi: {exception.Message}");
                 });
         // 4. Lắng nghe tin nhắn
         var consumer = new AsyncEventingBasicConsumer(_channel);
@@ -88,11 +79,11 @@ public abstract class BasePaymentWorker : BackgroundService
 
                 // Xác nhận (Ack) thanh cong, RabbitMQ xóa tin nhắn khỏi hàng đợi
                 await _channel.BasicAckAsync(ea.DeliveryTag, multiple: false, cancellationToken: stoppingToken);
-                
+
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
-                _logger.LogError($"[LỖI] Xử lý thất bại tại {_rabbitMqSettings.QueueName}. Lỗi: {ex.Message}. Đẩy vào DLQ...");
+                Console.WriteLine($"[LỖI] Xử lý thất bại tại {_queueName}. Lỗi: {ex.Message}. Đẩy vào DLQ...");
 
                 // Thất bại: Từ chối tin nhắn (Nack) và KHÔNG đưa lại vào hàng đợi cũ (requeue: false).
                 // Nack với requeue: false để đẩy vào DLX
@@ -100,7 +91,7 @@ public abstract class BasePaymentWorker : BackgroundService
             }
         };
 
-        await _channel.BasicConsumeAsync(_rabbitMqSettings.QueueName, autoAck: false, consumer: consumer, cancellationToken: stoppingToken);
+        await _channel.BasicConsumeAsync(_queueName, autoAck: false, consumer: consumer, cancellationToken: stoppingToken);
 
         await Task.Delay(Timeout.Infinite, stoppingToken);
     }
@@ -110,7 +101,6 @@ public abstract class BasePaymentWorker : BackgroundService
 
     public override async Task StopAsync(CancellationToken cancellationToken)
     {
-       
         if (_channel != null) await _channel.CloseAsync(cancellationToken);
         if (_connection != null) await _connection.CloseAsync(cancellationToken);
         await base.StopAsync(cancellationToken);
