@@ -18,6 +18,8 @@ public abstract class BasePaymentWorker : BackgroundService
     // Tên của Exchange và Queue dành cho tin nhắn lỗi
     private const string DlxName = "dlx_payment_exchange";
     private const string DlqName = "dlq_payment_queue";
+
+    private readonly SemaphoreSlim _lock = new(1, 1);
     protected BasePaymentWorker(
                                 IOptions<RabbitMqSettings> rabbitMqSettings,
                                 ILogger<BasePaymentWorker> logger)
@@ -26,19 +28,20 @@ public abstract class BasePaymentWorker : BackgroundService
         //_routingKey = routingKey;
         _rabbitMqSettings = rabbitMqSettings.Value;
         _logger = logger;
-        _logger.LogInformation("Start worker");
+        _logger.LogInformation($"BasePaymentWorker started for queue: {_rabbitMqSettings.QueueName}");
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    
     {
-
-        var factory = new ConnectionFactory {HostName=_rabbitMqSettings.HostName, UserName=_rabbitMqSettings.UserName,Password=_rabbitMqSettings.Password, AutomaticRecoveryEnabled = true, ClientProvidedName=_rabbitMqSettings.ServiceName };
-        _connection = await factory.CreateConnectionAsync(stoppingToken);
-        _channel = await _connection.CreateChannelAsync(cancellationToken: stoppingToken);
+        //var factory = new ConnectionFactory {HostName=_rabbitMqSettings.HostName, UserName=_rabbitMqSettings.UserName,Password=_rabbitMqSettings.Password, AutomaticRecoveryEnabled = true, ClientProvidedName=_rabbitMqSettings.ServiceName };
+        //_connection = await factory.CreateConnectionAsync(stoppingToken);
+        //_channel = await _connection.CreateChannelAsync(cancellationToken: stoppingToken);
+        await EnsureConnectionAndChannelAsync(stoppingToken);
         // --- 1. KHAI BÁO CƠ CHẾ DEAD LETTER (DLX & DLQ) ---
-        await _channel.ExchangeDeclareAsync(DlxName, ExchangeType.Direct, durable: true, cancellationToken: stoppingToken);
+        await _channel!.ExchangeDeclareAsync(DlxName, ExchangeType.Direct, durable: true, cancellationToken: stoppingToken);
         var dlqArgs = new Dictionary<string, object?> { { "x-queue-type", "quorum" } };
-        await _channel.QueueDeclareAsync(DlqName, durable: true, exclusive: false, autoDelete: false, arguments: dlqArgs, cancellationToken: stoppingToken);
+        await _channel!.QueueDeclareAsync(DlqName, durable: true, exclusive: false, autoDelete: false, arguments: dlqArgs, cancellationToken: stoppingToken);
         await _channel.QueueBindAsync(DlqName, DlxName, _rabbitMqSettings.RoutingKey, cancellationToken: stoppingToken);
         //********************************************
 
@@ -55,6 +58,8 @@ public abstract class BasePaymentWorker : BackgroundService
 
         // 3. Liên kết Queue với Exchange thông qua Routing Key
         await _channel.QueueBindAsync(_rabbitMqSettings.QueueName,_rabbitMqSettings.ExchangeName, _rabbitMqSettings.RoutingKey, cancellationToken: stoppingToken);
+        // 4. kiểm soát số lượng tin nhắn mà consumer được phép nhận trước (prefetch) mà chưa ack (xác nhận).  
+        await _channel.BasicQosAsync(prefetchSize: 0, prefetchCount: 10, global: false, cancellationToken: stoppingToken);
         // --- 3. ĐỊNH NGHĨA CHÍNH SÁCH RETRY VỚI POLLY ---
         // Chiến lược Exponential Backoff: Thử lại 3 lần. 
         // Thời gian chờ: Lần 1 (2 giây), Lần 2 (4 giây), Lần 3 (8 giây)
@@ -105,14 +110,66 @@ public abstract class BasePaymentWorker : BackgroundService
         await Task.Delay(Timeout.Infinite, stoppingToken);
     }
 
+    private async Task EnsureConnectionAndChannelAsync(CancellationToken cancellationToken)
+    {
+        await _lock.WaitAsync(cancellationToken);
+        try
+        {
+            if (_connection?.IsOpen == true && _channel?.IsOpen == true)
+                return;
+
+            var factory = new ConnectionFactory
+            {
+                HostName = _rabbitMqSettings.HostName,
+                UserName = _rabbitMqSettings.UserName,
+                Password = _rabbitMqSettings.Password,
+                AutomaticRecoveryEnabled = true,
+                NetworkRecoveryInterval = TimeSpan.FromSeconds(5),
+                ClientProvidedName = _rabbitMqSettings.ServiceName
+            };
+
+            _connection = await factory.CreateConnectionAsync(cancellationToken);
+            _channel = await _connection.CreateChannelAsync(cancellationToken: cancellationToken);
+        }
+        finally
+        {
+            _lock.Release();
+        }
+    }
+
     // Class con bắt buộc phải ghi đè hàm này
     protected abstract Task ProcessMessageAsync(string message);
 
     public override async Task StopAsync(CancellationToken cancellationToken)
     {
-       
-        if (_channel != null) await _channel.CloseAsync(cancellationToken);
-        if (_connection != null) await _connection.CloseAsync(cancellationToken);
+
+        await _lock.WaitAsync(cancellationToken);
+        try
+        {
+            if (_channel != null)
+            {
+                await _channel.CloseAsync(cancellationToken);
+                await _channel.DisposeAsync();
+                _channel = null;
+            }
+
+            if (_connection != null)
+            {
+                await _connection.CloseAsync(cancellationToken);
+                await _connection.DisposeAsync();
+                _connection = null;
+            }
+        }
+        finally
+        {
+            _lock.Release();
+            _lock.Dispose();
+        }
+
         await base.StopAsync(cancellationToken);
+    }
+    public async ValueTask DisposeAsync()
+    {
+        await StopAsync(CancellationToken.None);
     }
 }

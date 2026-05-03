@@ -2,17 +2,14 @@
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using RabbitPublisher.Models;
-using System.Data.Common;
-using System.Runtime;
 using System.Text;
-using System.Threading.Channels;
 namespace RabbitPublisher.Services
 {
     public class RabbitMqService : IRabbitMqService, IAsyncDisposable
     {
         private readonly RabbitMqSettings _rabbitMqSettings;
-        private  IChannel _channel;
-        private  IConnection _connection;
+        private  IChannel? _channel;
+        private  IConnection? _connection;
         private readonly SemaphoreSlim _lock = new(1, 1);
 
         public RabbitMqService(IOptions<RabbitMqSettings> rabbitMqSettings) 
@@ -29,12 +26,28 @@ namespace RabbitPublisher.Services
             try
             {
                 if (_connection?.IsOpen == true && _channel?.IsOpen == true) return;
+                // Close old resources nếu còn tồn tại
+                if (_channel != null)
+                {
+                    await _channel.CloseAsync();
+                    await _channel.DisposeAsync();
+                    _channel = null;
+                }
+                // Tạo connection mới
+                if (_connection != null)
+                {
+                    await _connection.CloseAsync();
+                    await _connection.DisposeAsync();
+                    _connection = null;
+                }
                 var factory = new ConnectionFactory
                 {
                     HostName = _rabbitMqSettings.HostName,
                     UserName = _rabbitMqSettings.UserName,
                     Password = _rabbitMqSettings.Password,
-                    ClientProvidedName = "Publisher"
+                    ClientProvidedName = "Publisher",
+                    AutomaticRecoveryEnabled = true,      // ← rất quan trọng
+                    NetworkRecoveryInterval = TimeSpan.FromSeconds(5)
                 };
 
                 // Tạo kết nối và channel async
@@ -43,9 +56,10 @@ namespace RabbitPublisher.Services
 
                 // 2. Khai báo Exchange (đảm bảo Exchange tồn tại)
                 await _channel.ExchangeDeclareAsync(
-                    exchange: "payment_exchange",
+                    exchange: _rabbitMqSettings.ExchangeName,
                     type: ExchangeType.Direct,
-                    durable: true);
+                    durable: true,
+                    autoDelete: false);
             }
             finally {  _lock.Release(); }
         }
@@ -56,7 +70,7 @@ namespace RabbitPublisher.Services
             var properties = new BasicProperties { DeliveryMode = DeliveryModes.Persistent };
             // BasicPublishAsync trong bản 7.x
             await _channel!.BasicPublishAsync(
-                exchange: "payment_exchange",
+                exchange: _rabbitMqSettings.ExchangeName,
                 routingKey: routingKey,
                 mandatory: false,
                 basicProperties: properties, // Tạo mới properties nếu cần
@@ -65,18 +79,27 @@ namespace RabbitPublisher.Services
         // Giải phóng tài nguyên đúng cách cho bản 7.x
         public async ValueTask DisposeAsync()
         {
-            if (_channel != null)
+            await _lock.WaitAsync(); // tránh race khi dispose trong lúc publish
+            try
             {
-                await _channel.CloseAsync();
-                _channel.Dispose();
-                _channel = null;
-            }
+                if (_channel != null)
+                {
+                    await _channel.CloseAsync();
+                    await _channel.DisposeAsync();
+                    _channel = null;
+                }
 
-            if (_connection != null)
+                if (_connection != null)
+                {
+                    await _connection.CloseAsync();
+                    await _connection.DisposeAsync();
+                    _connection = null;
+                }
+            }
+            finally
             {
-                await _connection.CloseAsync();
-                _connection.Dispose();
-                _connection = null;
+                _lock.Release();
+                _lock.Dispose();
             }
         }
     }
