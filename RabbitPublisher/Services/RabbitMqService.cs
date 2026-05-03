@@ -33,7 +33,8 @@ namespace RabbitPublisher.Services
                 {
                     HostName = _rabbitMqSettings.HostName,
                     UserName = _rabbitMqSettings.UserName,
-                    Password = _rabbitMqSettings.Password
+                    Password = _rabbitMqSettings.Password,
+                    ClientProvidedName = "Publisher"
                 };
 
                 // Tạo kết nối và channel async

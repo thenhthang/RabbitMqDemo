@@ -32,7 +32,7 @@ public abstract class BasePaymentWorker : BackgroundService
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
 
-        var factory = new ConnectionFactory {HostName=_rabbitMqSettings.HostName, UserName=_rabbitMqSettings.UserName,Password=_rabbitMqSettings.Password, AutomaticRecoveryEnabled = true };
+        var factory = new ConnectionFactory {HostName=_rabbitMqSettings.HostName, UserName=_rabbitMqSettings.UserName,Password=_rabbitMqSettings.Password, AutomaticRecoveryEnabled = true, ClientProvidedName=_rabbitMqSettings.ServiceName };
         _connection = await factory.CreateConnectionAsync(stoppingToken);
         _channel = await _connection.CreateChannelAsync(cancellationToken: stoppingToken);
         // --- 1. KHAI BÁO CƠ CHẾ DEAD LETTER (DLX & DLQ) ---
@@ -43,7 +43,7 @@ public abstract class BasePaymentWorker : BackgroundService
         //********************************************
 
         // 1. Khai báo Exchange (phòng trường hợp API chưa chạy)
-        await _channel.ExchangeDeclareAsync("payment_exchange", ExchangeType.Direct, durable: true, cancellationToken: stoppingToken);
+        await _channel.ExchangeDeclareAsync(_rabbitMqSettings.ExchangeName, ExchangeType.Direct, durable: true, cancellationToken: stoppingToken);
 
         // 2. Khai báo Queue (Sử dụng Quorum queue cho an toàn)
         var args = new Dictionary<string, object?> {

@@ -7,6 +7,7 @@ using NLog.Extensions.Logging;
 var logger = LogManager.Setup()
                        .LoadConfigurationFromFile("nlog.config")
                        .GetCurrentClassLogger();
+
 try
 {
     var builder = Host.CreateApplicationBuilder(args);
