@@ -11,6 +11,7 @@ namespace RabbitPublisher.Services
         private  IChannel? _channel;
         private  IConnection? _connection;
         private readonly SemaphoreSlim _lock = new(1, 1);
+        private bool IsReady => _connection?.IsOpen == true && _channel?.IsOpen == true;
 
         public RabbitMqService(IOptions<RabbitMqSettings> rabbitMqSettings) 
         { 
@@ -19,13 +20,13 @@ namespace RabbitPublisher.Services
         // Phương thức khởi tạo kết nối bất đồng bộ
         private async Task EnsureChannelAsync()
         {
-            if (_connection?.IsOpen == true && _channel?.IsOpen == true)
+            if (IsReady)
                 return;
 
             await _lock.WaitAsync();
             try
             {
-                if (_connection?.IsOpen == true && _channel?.IsOpen == true) return;
+                if (IsReady) return;
                 // Close old resources nếu còn tồn tại
                 if (_channel != null)
                 {

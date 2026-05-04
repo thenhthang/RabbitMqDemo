@@ -39,14 +39,14 @@ public abstract class BasePaymentWorker : BackgroundService
         //_channel = await _connection.CreateChannelAsync(cancellationToken: stoppingToken);
         await EnsureConnectionAndChannelAsync(stoppingToken);
         // --- 1. KHAI BÁO CƠ CHẾ DEAD LETTER (DLX & DLQ) ---
-        await _channel!.ExchangeDeclareAsync(DlxName, ExchangeType.Direct, durable: true, cancellationToken: stoppingToken);
+        await _channel!.ExchangeDeclareAsync(exchange: DlxName, type: ExchangeType.Direct, durable: true, autoDelete:false, cancellationToken: stoppingToken);
         var dlqArgs = new Dictionary<string, object?> { { "x-queue-type", "quorum" } };
         await _channel!.QueueDeclareAsync(DlqName, durable: true, exclusive: false, autoDelete: false, arguments: dlqArgs, cancellationToken: stoppingToken);
         await _channel.QueueBindAsync(DlqName, DlxName, _rabbitMqSettings.RoutingKey, cancellationToken: stoppingToken);
         //********************************************
 
         // 1. Khai báo Exchange (phòng trường hợp API chưa chạy)
-        await _channel.ExchangeDeclareAsync(_rabbitMqSettings.ExchangeName, ExchangeType.Direct, durable: true, cancellationToken: stoppingToken);
+        await _channel.ExchangeDeclareAsync( exchange: _rabbitMqSettings.ExchangeName, type: ExchangeType.Direct, durable: true, autoDelete:false, cancellationToken: stoppingToken);
 
         // 2. Khai báo Queue (Sử dụng Quorum queue cho an toàn)
         var args = new Dictionary<string, object?> {
