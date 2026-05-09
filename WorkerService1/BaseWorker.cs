@@ -72,7 +72,7 @@ public abstract class BaseWorker : BackgroundService
                 sleepDurationProvider: attempt => TimeSpan.FromSeconds(Math.Pow(2, attempt)),
                 onRetry: (exception, timeSpan, attempt, context) =>
                 {
-                    _logger.LogWarning($"[CẢNH BÁO] {_rabbitMqSettings.QueueName} lỗi. Thử lại lần {attempt} sau {timeSpan.TotalSeconds}s. Lỗi: {exception.Message}");
+                    _logger.LogWarning(exception, "[Warning] tại {QueueName}. Thử lại lần {attempt} sau {TotalSeconds}s.", _rabbitMqSettings.QueueName,attempt,timeSpan.TotalSeconds);
                 });
         // 4. Lắng nghe tin nhắn
         var consumer = new AsyncEventingBasicConsumer(_channel);
@@ -87,19 +87,20 @@ public abstract class BaseWorker : BackgroundService
                     // Thực thi logic nghiệp vụ dưới sự bảo vệ của Polly
                     await retryPolicy.ExecuteAsync(async () =>
                     {
+                        _logger.LogInformation("[Inprocess] {message}",message);
                         // Nếu hàm này ném lỗi, Polly sẽ tự động catch và retry theo thời gian đã định
                         //Ham xu ly nghiep vu chinh
                         await ProcessMessageAsync(message);
                     });
                 }
-                _logger.LogInformation($"Xy ly thanh cong {message}");
+                _logger.LogInformation("[Success]: {message}",message);
                 // Xác nhận (Ack) thanh cong, RabbitMQ xóa tin nhắn khỏi hàng đợi
                 await _channel.BasicAckAsync(ea.DeliveryTag, multiple: false, cancellationToken: stoppingToken);
                 
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
-                _logger.LogError(ex,$"[LỖI] Xử lý thất bại tại {_rabbitMqSettings.QueueName}. Lỗi: {ex.Message}. Đẩy vào {DlqName}");
+                _logger.LogError(ex,"[Failed]: {message}, tại {QueueName}. Chuyển vào {DlqName}",message,_rabbitMqSettings.QueueName,DlxName);
 
                 // Thất bại: Từ chối tin nhắn (Nack) và KHÔNG đưa lại vào hàng đợi cũ (requeue: false).
                 // Nack với requeue: false để đẩy vào DLX

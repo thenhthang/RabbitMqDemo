@@ -21,12 +21,10 @@ namespace WorkerService1
         {
             try
             {
-                _logger.LogInformation("Http {Method} Time {Time} Message {Msg}", "POST", DateTime.Now.TimeOfDay, message);
+                //_logger.LogInformation("Http {Method} Time {Time} Message {Msg}", "POST", DateTime.Now.TimeOfDay, message);
                 var data = JsonSerializer.Deserialize<int>(message);
-
-                
                 Task.Delay(1000);          
-                // Thêm logic gọi Database, cập nhật tồn kho ở đây
+                // Thêm logic ở đây
                 return Task.CompletedTask;
             }
             catch (Exception) 
