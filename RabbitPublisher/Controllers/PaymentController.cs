@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using RabbitMQ;
 using RabbitPublisher.Services;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 namespace RabbitPublisher.Controllers
 {
     [Route("api/[controller]")]
@@ -17,7 +19,15 @@ namespace RabbitPublisher.Controllers
         [Route("ipn")]
         public IActionResult Webhook()
         {
-            _rabbitMqService.PublishAsync($"Xin chao {Guid.NewGuid().ToString()}", "test");
+            var data = new
+            {
+                orderId = Guid.NewGuid().ToString(),
+                orderInfo = "Thanh toan dang ky kham benh",
+                amount = 150000,
+                createdDate = DateTime.Now,
+            };
+            var jsonData = JsonSerializer.Serialize(data);
+            _rabbitMqService.PublishAsync(jsonData, "test");
             return Ok();
         }
     }

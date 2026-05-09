@@ -1,9 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "7JXvn+59VyU=",
+  "dgSpecHash": "bG4tO/MexPA=",
   "success": true,
   "projectFilePath": "Z:\\Storage\\Dev\\RabbitPublisher\\WorkerService1\\WorkerService1.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\room\\.nuget\\packages\\hangfire.core\\1.8.23\\hangfire.core.1.8.23.nupkg.sha512",
+    "C:\\Users\\room\\.nuget\\packages\\hangfire.memorystorage\\1.8.1.2\\hangfire.memorystorage.1.8.1.2.nupkg.sha512",
+    "C:\\Users\\room\\.nuget\\packages\\hangfire.netcore\\1.8.23\\hangfire.netcore.1.8.23.nupkg.sha512",
     "C:\\Users\\room\\.nuget\\packages\\microsoft.extensions.configuration\\8.0.0\\microsoft.extensions.configuration.8.0.0.nupkg.sha512",
     "C:\\Users\\room\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\8.0.0\\microsoft.extensions.configuration.abstractions.8.0.0.nupkg.sha512",
     "C:\\Users\\room\\.nuget\\packages\\microsoft.extensions.configuration.binder\\8.0.2\\microsoft.extensions.configuration.binder.8.0.2.nupkg.sha512",
@@ -33,6 +36,7 @@
     "C:\\Users\\room\\.nuget\\packages\\microsoft.extensions.options.configurationextensions\\8.0.0\\microsoft.extensions.options.configurationextensions.8.0.0.nupkg.sha512",
     "C:\\Users\\room\\.nuget\\packages\\microsoft.extensions.primitives\\8.0.0\\microsoft.extensions.primitives.8.0.0.nupkg.sha512",
     "C:\\Users\\room\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.22.1\\microsoft.visualstudio.azure.containers.tools.targets.1.22.1.nupkg.sha512",
+    "C:\\Users\\room\\.nuget\\packages\\newtonsoft.json\\11.0.1\\newtonsoft.json.11.0.1.nupkg.sha512",
     "C:\\Users\\room\\.nuget\\packages\\nlog\\6.1.1\\nlog.6.1.1.nupkg.sha512",
     "C:\\Users\\room\\.nuget\\packages\\nlog.extensions.logging\\6.1.2\\nlog.extensions.logging.6.1.2.nupkg.sha512",
     "C:\\Users\\room\\.nuget\\packages\\nlog.targets.seq\\4.0.2\\nlog.targets.seq.4.0.2.nupkg.sha512",

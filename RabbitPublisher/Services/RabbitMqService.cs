@@ -47,7 +47,7 @@ namespace RabbitPublisher.Services
                     UserName = _rabbitMqSettings.UserName,
                     Password = _rabbitMqSettings.Password,
                     ClientProvidedName = "Publisher",
-                    AutomaticRecoveryEnabled = true,      // ← rất quan trọng
+                    AutomaticRecoveryEnabled = true,
                     NetworkRecoveryInterval = TimeSpan.FromSeconds(5)
                 };
 
@@ -69,15 +69,15 @@ namespace RabbitPublisher.Services
             await EnsureChannelAsync();
             var body = Encoding.UTF8.GetBytes(message);
             var properties = new BasicProperties { DeliveryMode = DeliveryModes.Persistent };
-            // BasicPublishAsync trong bản 7.x
+            // BasicPublishAsync
             await _channel!.BasicPublishAsync(
                 exchange: _rabbitMqSettings.ExchangeName,
                 routingKey: routingKey,
                 mandatory: false,
-                basicProperties: properties, // Tạo mới properties nếu cần
+                basicProperties: properties,
                 body: body);
         }
-        // Giải phóng tài nguyên đúng cách cho bản 7.x
+        // Giải phóng tài nguyên
         public async ValueTask DisposeAsync()
         {
             await _lock.WaitAsync(); // tránh race khi dispose trong lúc publish

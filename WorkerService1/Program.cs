@@ -3,7 +3,8 @@ using WorkerService1;
 using NLog;
 using NLog.Web;
 using NLog.Extensions.Logging;
-
+using Hangfire;
+using Hangfire.MemoryStorage;
 var logger = LogManager.Setup()
                        .LoadConfigurationFromFile("nlog.config")
                        .GetCurrentClassLogger();
@@ -14,6 +15,7 @@ try
     builder.Services.AddWindowsService();
     builder.Logging.ClearProviders();
     builder.UseNLog();
+
     builder.Services.Configure<RabbitMqSettings>(builder.Configuration.GetSection("RabbitMqSettings"));
     builder.Services.AddHostedService<Worker>();
 

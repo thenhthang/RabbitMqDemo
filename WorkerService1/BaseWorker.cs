@@ -7,28 +7,30 @@ using System.Text;
 using System.Text.Json;
 using WorkerService1;
 
-public abstract class BasePaymentWorker : BackgroundService
+public abstract class BaseWorker : BackgroundService
 {
     //private readonly string _queueName;
     //private readonly string _routingKey;
     private IConnection? _connection;
     private IChannel? _channel;
-    private readonly ILogger<BasePaymentWorker> _logger;
+    private readonly ILogger<BaseWorker> _logger;
     private readonly RabbitMqSettings _rabbitMqSettings;
     // Tên của Exchange và Queue dành cho tin nhắn lỗi
-    private const string DlxName = "dlx_payment_exchange";
-    private const string DlqName = "dlq_payment_queue";
+    private readonly string DlxName;
+    private readonly string DlqName;
 
     private readonly SemaphoreSlim _lock = new(1, 1);
-    protected BasePaymentWorker(
+    protected BaseWorker(
                                 IOptions<RabbitMqSettings> rabbitMqSettings,
-                                ILogger<BasePaymentWorker> logger)
+                                ILogger<BaseWorker> logger)
     {
         //_queueName = queueName;
         //_routingKey = routingKey;
         _rabbitMqSettings = rabbitMqSettings.Value;
+        DlxName = rabbitMqSettings.Value.DeadLetterExchangeName;
+        DlqName = rabbitMqSettings.Value.DeadLetterQueueName;
         _logger = logger;
-        _logger.LogInformation($"BasePaymentWorker started for queue: {_rabbitMqSettings.QueueName}");
+        _logger.LogInformation($"{_rabbitMqSettings.ServiceName} started for queue: {_rabbitMqSettings.QueueName}");
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -90,14 +92,14 @@ public abstract class BasePaymentWorker : BackgroundService
                         await ProcessMessageAsync(message);
                     });
                 }
-
+                _logger.LogInformation($"Xy ly thanh cong {message}");
                 // Xác nhận (Ack) thanh cong, RabbitMQ xóa tin nhắn khỏi hàng đợi
                 await _channel.BasicAckAsync(ea.DeliveryTag, multiple: false, cancellationToken: stoppingToken);
                 
             }
             catch (Exception ex) 
             {
-                _logger.LogError($"[LỖI] Xử lý thất bại tại {_rabbitMqSettings.QueueName}. Lỗi: {ex.Message}. Đẩy vào DLQ...");
+                _logger.LogError(ex,$"[LỖI] Xử lý thất bại tại {_rabbitMqSettings.QueueName}. Lỗi: {ex.Message}. Đẩy vào {DlqName}");
 
                 // Thất bại: Từ chối tin nhắn (Nack) và KHÔNG đưa lại vào hàng đợi cũ (requeue: false).
                 // Nack với requeue: false để đẩy vào DLX

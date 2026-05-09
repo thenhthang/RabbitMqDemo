@@ -1,9 +1,11 @@
 ﻿
 using Microsoft.Extensions.Options;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace WorkerService1
 {
-    public class Worker : BasePaymentWorker
+    public class Worker : BaseWorker
     {
         private readonly ILogger<Worker> _logger;
         // Truyền tên Queue và Routing Key tương ứng vào Base
@@ -17,9 +19,20 @@ namespace WorkerService1
 
         protected override Task ProcessMessageAsync(string message)
         {
-            _logger.LogInformation($"Dang xy ly tin nhan {message}");
-            // Thêm logic gọi Database, cập nhật tồn kho ở đây
-            return Task.CompletedTask;
+            try
+            {
+                _logger.LogInformation("Http {Method} Time {Time} Message {Msg}", "POST", DateTime.Now.TimeOfDay, message);
+                var data = JsonSerializer.Deserialize<int>(message);
+
+                
+                Task.Delay(1000);          
+                // Thêm logic gọi Database, cập nhật tồn kho ở đây
+                return Task.CompletedTask;
+            }
+            catch (Exception) 
+            {
+                throw;
+            }
         }
     }
 }

@@ -15,5 +15,7 @@ namespace WorkerService1
         public string QueueName {  get; set; }
         public string RoutingKey {  get; set; }
         public string ServiceName {  get; set; }
+        public string DeadLetterExchangeName {  get; set; }
+        public string DeadLetterQueueName { get;set; }
     }
 }
